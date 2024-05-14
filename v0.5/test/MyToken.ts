@@ -70,7 +70,9 @@ describe('MyToken', () => {
       const { token, owner, account1, account2 } = await loadFixture(deployMintContractFixture);
       const decimals = await token.decimals();
       const amount = ethers.utils.parseUnits('1000', decimals);
-      
+      await token.connect(owner).transferFromOwner(account1.address, account2.address, amount);
+      expect(await token.balanceOf(account2.address)).to.equal(amount);
+      console.log('account1 balance:', ethers.utils.formatUnits(await token.balanceOf(account1.address), decimals));
     });
   });
 });
